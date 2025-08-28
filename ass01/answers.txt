@@ -147,3 +147,63 @@ CHALLENGING
 4.
 
 
+
+
+EXERCISE 1.3 
+
+1. 
+Runnning the code:
+gradle -PmainClass=exercises01.CounterThreads2Covid run
+
+Code:
+package exercises01;
+
+import java.util.concurrent.locks.*;
+
+public class CounterThreads2Covid {
+
+    long counter = 0;
+    final long PEOPLE = 10_000;
+    final long MAX_PEOPLE_COVID = 15_000;
+    ReentrantLock lock = new ReentrantLock();
+
+    public CounterThreads2Covid() {
+        try {
+            Turnstile turnstile1 = new Turnstile();
+            Turnstile turnstile2 = new Turnstile();
+
+            turnstile1.start();
+            turnstile2.start();
+            turnstile1.join();
+            turnstile2.join();
+
+            System.out.println(counter + " people entered");
+        } catch (InterruptedException e) {
+            System.out.println("Error " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        new CounterThreads2Covid();
+    }
+
+    public class Turnstile extends Thread {
+        public void run() {
+            for (int i = 0; i < PEOPLE; i++) {
+                try {
+                    lock.lock();
+                    if (counter < MAX_PEOPLE_COVID)
+                        counter++;
+                } finally {
+                    lock.unlock();
+                }
+
+            }
+        }
+    }
+}
+
+2. 
+
+The threads will never let more than 15000 people in because there is an if statement inside the lock with the counter. Some will be rejected ie the for loop will run but not increase the counter.
