@@ -251,9 +251,38 @@ Shared hosting server, where each developer thinks they have sole ownership over
 Ubuntu - native 
 ### 2. 
 - OS:ATM - Ubuntu 
-- 14 cores
+- 20 cores
 - Cache 24 MB - Intel’s Hybrid Cache Architecture
 - 32 gb ram
 
 ### 3. 
-Running the code: gradle -PmainClass=exercises01.Timer run
+
+Running the code: `gradle -PmainClass=exercises01.Timer run`
+
+
+**Print:**
+
+Sum: 5050
+
+Time spent (nanoseconds): 772
+
+Code:
+```
+package exercises01;
+
+public class Timer {
+    public static void main(String[] args) {
+        long start, spent = 0;
+        start = System.nanoTime();
+        int sum = 0;
+        for (int i = 1; i <= 100; i++) {
+            sum += i;
+        }
+        spent = System.nanoTime() - start;
+
+        System.out.println("Sum: " + sum);
+        System.out.println("Time spent (nanoseconds): " + spent);
+    }
+}
+``` 
+
