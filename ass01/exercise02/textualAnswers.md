@@ -130,3 +130,54 @@ This would work if you only have one thread  because  if the set sunction is run
 
 ## 2.4
 We  are again ensuring visability and thus t would always terminate but stil vulnurable to mutex issues
+
+# Exercise 3
+
+## 3.1  (Mandatory)
+
+Output from multiple runs:
+```
+Sum is 1903354,000000 and should be 2000000,000000
+Sum is 1898422,000000 and should be 2000000,000000
+Sum is 1890361,000000 and should be 2000000,000000
+Sum is 1894739,000000 and should be 2000000,000000
+```
+
+## 3.2 
+The race condition happens because the 2 locks lock addInstance() locks the object m, while addStatic() is locking the class Mystery Class. So because these are different things being locked, t1 and t2 can run at the same time, meaning that they can access and update sum at the same time.
+
+## 3.3
+
+The new Mystery Class now has one lock, that keeps track on both methods, resulting in access to the shared variable sum is synchronized.
+
+New Mystery Class:
+```
+class Mystery {
+    private static double sum = 0;
+    private static final Object lock = new Object();
+
+
+    public static void addStatic(double x) {
+        synchronized (lock) {
+            sum += x;
+        }
+    }
+
+    public void addInstance(double x) {
+        synchronized (lock) {
+            sum += x;
+        }
+    }
+
+    public static double sum() {
+        synchronized (lock) {
+            return sum;
+        }
+    }
+}
+```
+
+## 3.4
+Removing the synchronized modifier from sum does not break the mutual exclusion, as the two other methods are syncronized 
+
+
